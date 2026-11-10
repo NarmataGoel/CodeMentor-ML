@@ -1,0 +1,497 @@
+[
+  {
+    "title": "bst_height",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "tree_height",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "similar_trees",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "balance",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "bfs",
+    "topic": "Graphs",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "right_bfs",
+    "topic": "Graphs",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "bubble_sort_step_by_step",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "build_heap",
+    "topic": "Heap",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "binary_search",
+    "topic": "Searching",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "recursive_binary_search",
+    "topic": "Searching",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "bst_search",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "recursive_linear_search",
+    "topic": "Searching",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "check_tree",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "count_leaves",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "count_internal_nodes_bst",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "negative_counting_sort",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "counting_sort_step_by_step",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "two_add_up",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "down_n",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "element_at_stack",
+    "topic": "Stack",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "leftover_element",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "duplicate_elements",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "routing_bst",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "find_element",
+    "topic": "Searching",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "find_first_negative",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "recursive_break_finder",
+    "topic": "Recursion",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "equals_bst",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "order_statistic",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "mathematical_expression",
+    "topic": "Math / Theory",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "fibonacci",
+    "topic": "Math / Theory",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "queue_with_array",
+    "topic": "Queue",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "filter_linked_list",
+    "topic": "Linked List",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "frequency_element",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "queue_jumper",
+    "topic": "Queue",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "hashset",
+    "topic": "Hashing",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "sorted_insertion_first",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "sorted_insertion_last",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "recursive_insertion_sort",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "invert_array",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "invert_phrase",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "invert_stack",
+    "topic": "Stack",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "invert_stack_index",
+    "topic": "Stack",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "invert_stack_without_queue",
+    "topic": "Stack",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "is_heap",
+    "topic": "Heap",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "linked_list",
+    "topic": "Linked List",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "adjacency_list",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "mariana_and_books",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "adjacency_matrix",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "max_bst",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "max_stack",
+    "topic": "Stack",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "max_stack_index",
+    "topic": "Stack",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "best_pivot",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "merge_sort_step_by_step",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "min_bst",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "move_impostor",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "move_n",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "move_three",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "sort_stack_inverting",
+    "topic": "Stack",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "plates_sorting",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "brackets",
+    "topic": "Stack",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "stable_partition",
+    "topic": "Partitioning",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "hoare_partitioning",
+    "topic": "Partitioning",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "lomuto_partitioning",
+    "topic": "Partitioning",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "lomuto_partitioning_last",
+    "topic": "Partitioning",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "stack_with_array",
+    "topic": "Stack",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "reverse_polish",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "element_positions",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "recursive_power",
+    "topic": "Recursion",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "predecessor_bst",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "number_larger_elements_bst",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "number_smaller_elements_bst",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "quick_sort_step_by_step",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "radix_sort",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "radix_sort_two_digits",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "radix_sort_three_digits",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "removal_bst",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "remove_index_linkedlist",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "rotations_bst",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "recursive_selection_sort",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "selection_sort_step_by_step",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "without_pair",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "sum_leaves",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "stooge_sort",
+    "topic": "Sorting",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "stopwords",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "successor_bst",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "frequency_table",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "hash_table_chaining",
+    "topic": "Hashing",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "hash_table_probing",
+    "topic": "Hashing",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "master_theorem",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "top_n",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "tower_of_hanoi",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "three_n_plus_one",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "trim_linked_list",
+    "topic": "Linked List",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "swap_neighbors",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "swap_neighbors_linked_list",
+    "topic": "Linked List",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "nearest_value_bst",
+    "topic": "Trees / BST",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "circular_vector",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "warm_up_dsa",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  },
+  {
+    "title": "word_cloud",
+    "topic": "Arrays",
+    "difficulty": "Unknown"
+  }
+]

@@ -1,0 +1,13 @@
+# conda activate E:\conda_envs\codementor
+
+# cd /d E:\codeMentor\backend
+# uvicorn app.main:app --reload
+
+fastapi
+uvicorn[standard]
+pandas
+numpy
+scikit-learn
+joblib
+pymongo
+python-dotenv
