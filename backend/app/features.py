@@ -113,9 +113,9 @@ def build_student_features(problems, target_problem_title=None):
         if session["solved"]
     )
 
-    if previous_attempts > 0:
+    if valid_sessions:
         previous_success_rate = (
-            previous_successes / previous_attempts
+            previous_successes / len(valid_sessions)
         )
     else:
         previous_success_rate = 0.0
@@ -163,6 +163,7 @@ def build_student_features(problems, target_problem_title=None):
 
     previous_problem_attempts = 0
     previous_problem_successes = 0
+    target_sessions = []
 
     if target_problem_title:
         target_title = target_problem_title.strip().lower()
@@ -185,10 +186,9 @@ def build_student_features(problems, target_problem_title=None):
             if session["solved"]
         )
 
-    if previous_problem_attempts > 0:
+    if target_sessions:
         previous_problem_success_rate = (
-            previous_problem_successes
-            / previous_problem_attempts
+            previous_problem_successes / len(target_sessions)
         )
     else:
         previous_problem_success_rate = 0.0

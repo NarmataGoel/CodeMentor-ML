@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { getMlServiceStatus } from '../services/mlService'
+import { supabase } from '../lib/supabase'
 
 const sections = [
   {
@@ -95,6 +96,15 @@ const Navbar = () => {
           <small>{mlStatus.message}</small>
         </div>
       </div>
+
+      <button
+        className="sidebar-signout"
+        aria-label="Sign out"
+        onClick={() => supabase.auth.signOut()}
+      >
+        <i className="ti ti-logout" aria-hidden="true" />
+        <span>Sign out</span>
+      </button>
     </aside>
   )
 }

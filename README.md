@@ -520,6 +520,8 @@ Create a `.env` file:
 MONGODB_URI=your_mongodb_connection_string
 MONGODB_DATABASE=codementor
 FRONTEND_URL=http://localhost:5173
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_PUBLISHABLE_KEY=sb_publishable_your_key_here
 ```
 
 Start FastAPI:
@@ -559,13 +561,15 @@ npm install
 Create:
 
 ```text
-.env
+.env.local
 ```
 
 with:
 
 ```env
 VITE_API_BASE_URL=http://127.0.0.1:8000
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_your_key_here
 ```
 
 Start the frontend:
@@ -592,12 +596,16 @@ Never commit secrets to Git.
 MONGODB_URI=your_mongodb_connection_string
 MONGODB_DATABASE=codementor
 FRONTEND_URL=http://localhost:5173
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_PUBLISHABLE_KEY=sb_publishable_your_key_here
 ```
 
 ### Frontend
 
 ```env
 VITE_API_BASE_URL=http://127.0.0.1:8000
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_your_key_here
 ```
 
 Production deployments use environment variables configured directly in Render and Vercel.

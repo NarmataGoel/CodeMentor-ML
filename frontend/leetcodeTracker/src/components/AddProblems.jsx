@@ -33,10 +33,7 @@ const AddProblems = ({ HandleCancel, addProblem, editProblem }) => {
       setPredictionError('')
       setPrediction(null)
 
-      const result = await predictStudentProblem(
-        'demo-user',
-        title.trim()
-      )
+      const result = await predictStudentProblem(title.trim())
 
       setPrediction(result)
     } catch (error) {

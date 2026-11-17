@@ -17,7 +17,7 @@ const Recommendations = () => {
         setLoading(true)
         setError('')
 
-        const data = await getRecommendations('demo-user')
+        const data = await getRecommendations()
 
         setRecommendations(
           data.recommendations || []
@@ -125,10 +125,11 @@ const Recommendations = () => {
           <section className="recommendation-list">
             {filteredRecommendations.map(
               (problem, index) => {
-                const successRate =
-                  Math.round(
-                    problem.success_rate * 100
-                  )
+                const percentage = (value) => Math.round(Math.max(0, Math.min(1, Number(value) || 0)) * 100)
+                const successRate = percentage(problem.success_rate)
+                const successProbability = percentage(problem.success_probability)
+                const hasHistory = Number(problem.sessions) > 0
+                const displayTitle = String(problem.title || 'Recommended problem').replace(/[_-]+/g, ' ')
 
                 const priority =
                   problem.recommendation_score >= 0.75
@@ -139,72 +140,51 @@ const Recommendations = () => {
 
                 return (
                   <article
-                    className="panel recommendation-card"
+                    className={`panel recommendation-card recommendation-card-plain priority-card-${priority.toLowerCase()}`}
                     key={`${problem.title}-${index}`}
                   >
                     <div className="recommendation-main">
-                      <div className="recommendation-heading">
-                        <div>
-                          <span className="eyebrow">
-                            PERSONALIZED FOR YOU
-                          </span>
-
-                          <h2>{problem.title}</h2>
+                      <div className="rec-card-heading">
+                        <div className="rec-title-block">
+                          <h2>{displayTitle}</h2>
+                          <div className="rec-tags">
+                            <span className="rec-topic"><i className="ti ti-git-branch" /> {problem.topic}</span>
+                            <span className={`difficulty-badge difficulty-${String(problem.difficulty || '').toLowerCase()}`}>
+                              {problem.difficulty || 'Difficulty not recorded'}
+                            </span>
+                          </div>
                         </div>
-
                         <span
                           className={`priority-badge priority-${priority.toLowerCase()}`}
                         >
-                          {priority === 'Review'
-                            ? 'Reinforce'
-                            : `${priority} priority`}
+                          {priority === 'High' ? 'Focus next' : priority === 'Medium' ? 'Recommended' : 'Build familiarity'}
                         </span>
                       </div>
 
-                      <div className="recommendation-meta">
-                        <span>
-                          <i className="ti ti-git-branch" />
-                          {problem.topic}
-                        </span>
-
-                        <span
-                          className={`difficulty-badge difficulty-${String(
-                            problem.difficulty || ''
-                          ).toLowerCase()}`}
-                        >
-                          {problem.difficulty ||
-                            'Difficulty not recorded'}
-                        </span>
-
-                        <span>
-                          <i className="ti ti-target" />
-                          {successRate}% historical success
-                        </span>
-
-                        <span>
-                          <i className="ti ti-brain" />
-                          {Math.round(problem.success_probability * 100)}% predicted success
-                        </span>
+                      <div className="rec-signal-grid">
+                        <div className="rec-prediction">
+                          <div className="rec-prediction-ring" style={{ '--prediction': `${successProbability}%` }}>
+                            <span>{successProbability}%</span>
+                          </div>
+                          <div><strong>Estimated success</strong><small>Based on your practice data</small></div>
+                        </div>
+                        <div className="rec-history-signal">
+                          <div className="rec-history-top">
+                            <span>Your past results</span>
+                            <strong>{hasHistory ? `${successRate}%` : 'New topic'}</strong>
+                          </div>
+                          <div className="rec-meter"><span style={{ width: `${hasHistory ? successRate : 0}%` }} /></div>
+                          <small>{hasHistory ? `${problem.successes || 0} solved in ${problem.sessions} sessions · ${problem.attempts || 0} tries` : 'No previous attempts recorded'}</small>
+                        </div>
                       </div>
 
-                      <p className="recommendation-reason">
-                        <strong>Why practice this?</strong>{' '}
-                        {problem.reason}
-                      </p>
-
-                      <p className="recommendation-reason">
-                        <strong>Recommendation score:</strong>{' '}
-                        {problem.recommendation_score.toFixed(2)}
-                      </p>
+                      <details className="rec-explanation">
+                        <summary>Why this problem?</summary>
+                        <p>{problem.reason}</p>
+                      </details>
                     </div>
 
-                    <Link
-                      className="button button-secondary"
-                      to="/practice"
-                    >
-                      Open practice history{' '}
-                      <i className="ti ti-arrow-right" />
-                    </Link>
+                    <Link className="button button-primary rec-practice-button" to="/practice">Practice this <i className="ti ti-arrow-right" /></Link>
                   </article>
                 )
               }

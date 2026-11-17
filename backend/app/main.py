@@ -1,10 +1,14 @@
 from datetime import datetime, timezone
 from typing import Optional
 import os
+import json
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from app.model import predict_success
 from app.database import client, problems_collection
@@ -23,6 +27,41 @@ FRONTEND_URL = os.getenv(
     "FRONTEND_URL",
     "http://localhost:5173"
 )
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+SUPABASE_PUBLISHABLE_KEY = os.getenv("SUPABASE_PUBLISHABLE_KEY", "")
+bearer_auth = HTTPBearer(auto_error=False)
+
+
+def get_current_user(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(bearer_auth),
+) -> str:
+    """Validate the Supabase access token and return its user ID."""
+    if credentials is None or credentials.scheme.lower() != "bearer":
+        raise HTTPException(status_code=401, detail="Sign-in required")
+    if not SUPABASE_URL or not SUPABASE_PUBLISHABLE_KEY:
+        raise HTTPException(status_code=503, detail="Supabase authentication is not configured on the backend")
+
+    request = Request(
+        f"{SUPABASE_URL}/auth/v1/user",
+        headers={
+            "apikey": SUPABASE_PUBLISHABLE_KEY,
+            "Authorization": f"Bearer {credentials.credentials}",
+        },
+    )
+    try:
+        with urlopen(request, timeout=8) as response:
+            user = json.loads(response.read().decode("utf-8"))
+    except HTTPError as error:
+        if error.code in (400, 401, 403):
+            raise HTTPException(status_code=401, detail="Invalid or expired sign-in token") from error
+        raise HTTPException(status_code=503, detail="Could not verify sign-in token") from error
+    except (URLError, TimeoutError, json.JSONDecodeError) as error:
+        raise HTTPException(status_code=503, detail="Could not reach Supabase to verify sign-in") from error
+
+    user_id = user.get("id") if isinstance(user, dict) else None
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Invalid sign-in token")
+    return str(user_id)
 
 app.add_middleware(
     CORSMiddleware,
@@ -56,7 +95,6 @@ class AttemptHistoryItem(BaseModel):
 
 
 class ProblemCreate(BaseModel):
-    userId: str
     title: str
     difficulty: str
     status: str
@@ -82,7 +120,7 @@ def health():
 
 
 @app.get("/db-health")
-def database_health():
+def database_health(user_id: str = Depends(get_current_user)):
     try:
         client.admin.command("ping")
 
@@ -99,7 +137,7 @@ def database_health():
 
 
 @app.post("/predict")
-def predict(request: PredictionRequest):
+def predict(request: PredictionRequest, user_id: str = Depends(get_current_user)):
 
     features = [[
         request.previous_attempts,
@@ -119,14 +157,14 @@ class StudentPredictionRequest(BaseModel):
     problemTitle: str
 
 
-@app.post("/predict/{user_id}")
+@app.post("/predict/problem")
 def predict_for_student(
-    user_id: str,
-    request: StudentPredictionRequest
+    request: StudentPredictionRequest,
+    user_id: str = Depends(get_current_user),
 ):
     problems = list(
         problems_collection.find(
-            {"userId": user_id}
+            {"ownerId": user_id}
         )
     )
 
@@ -158,9 +196,13 @@ def predict_for_student(
 
 
 @app.post("/problems")
-def create_problem(problem: ProblemCreate):
+def create_problem(
+    problem: ProblemCreate,
+    user_id: str = Depends(get_current_user),
+):
 
     document = problem.model_dump()
+    document["ownerId"] = user_id
 
     document["createdAt"] = datetime.now(timezone.utc)
 
@@ -172,10 +214,10 @@ def create_problem(problem: ProblemCreate):
     }
 
 @app.get("/problems")
-def get_problems(userId: str):
+def get_problems(user_id: str = Depends(get_current_user)):
     problems = list(
         problems_collection.find(
-            {"userId": userId}
+            {"ownerId": user_id}
         )
     )
 
@@ -186,7 +228,11 @@ def get_problems(userId: str):
     return problems
 
 @app.put("/problems/{problem_id}")
-def update_problem(problem_id: str, problem: ProblemCreate):
+def update_problem(
+    problem_id: str,
+    problem: ProblemCreate,
+    user_id: str = Depends(get_current_user),
+):
     from bson import ObjectId
 
     try:
@@ -198,9 +244,10 @@ def update_problem(problem_id: str, problem: ProblemCreate):
         )
 
     document = problem.model_dump()
+    document["ownerId"] = user_id
 
     result = problems_collection.update_one(
-        {"_id": object_id},
+        {"_id": object_id, "ownerId": user_id},
         {"$set": document}
     )
 
@@ -216,7 +263,10 @@ def update_problem(problem_id: str, problem: ProblemCreate):
     }
 
 @app.delete("/problems/{problem_id}")
-def delete_problem(problem_id: str):
+def delete_problem(
+    problem_id: str,
+    user_id: str = Depends(get_current_user),
+):
     from bson import ObjectId
 
     try:
@@ -228,7 +278,7 @@ def delete_problem(problem_id: str):
         )
 
     result = problems_collection.delete_one(
-        {"_id": object_id}
+        {"_id": object_id, "ownerId": user_id}
     )
 
     if result.deleted_count == 0:
@@ -242,11 +292,11 @@ def delete_problem(problem_id: str):
         "id": problem_id
     }
 
-@app.get("/weak-topics/{user_id}")
-def get_weak_topics(user_id: str):
+@app.get("/weak-topics")
+def get_weak_topics(user_id: str = Depends(get_current_user)):
     problems = list(
         problems_collection.find(
-            {"userId": user_id}
+            {"ownerId": user_id}
         )
     )
 
@@ -260,11 +310,11 @@ def get_weak_topics(user_id: str):
         "weakTopics": weak_topics,
     }
 
-@app.get("/recommendations/{user_id}")
-def get_recommendations(user_id: str):
+@app.get("/recommendations")
+def get_recommendations(user_id: str = Depends(get_current_user)):
     problems = list(
         problems_collection.find(
-            {"userId": user_id}
+            {"ownerId": user_id}
         )
     )
 

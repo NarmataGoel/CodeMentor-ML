@@ -1,11 +1,18 @@
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../../auth/AuthContext'
 import { Problemcontext } from '../../context/context'
 import { getAnalytics } from '../../utils/analytics'
 
 const Profile = () => {
+  const { session } = useAuth()
   const { problems } = useContext(Problemcontext)
   const analytics = getAnalytics(problems)
+  const user = session?.user
+  const metadata = user?.user_metadata || {}
+  const rawName = metadata.full_name || metadata.name || metadata.username || user?.email?.split('@')[0] || 'Learner'
+  const userName = String(rawName).replace(/[._-]+/g, ' ').trim().replace(/\b\w/g, (letter) => letter.toUpperCase())
+  const initials = userName.split(/\s+/).slice(0, 2).map((part) => part[0]).join('').toUpperCase()
   const strongest = analytics.topics.filter((topic) => topic.status === 'Strong').slice(0, 3)
   const needsPractice = analytics.topics.filter((topic) => topic.status === 'Needs practice').slice(0, 3)
   const proficiency = analytics.completionRate === null ? 'Not enough data' : analytics.completionRate >= 80 ? 'Building strong habits' : analytics.completionRate >= 50 ? 'Making progress' : 'Early learning stage'
@@ -13,7 +20,7 @@ const Profile = () => {
   return (
     <div className="page-stack">
       <header className="page-header"><div><p className="eyebrow">YOUR LEARNING SNAPSHOT</p><h1>My skill profile</h1><p className="page-subtitle">A summary of what your current saved practice history can—and cannot—tell you.</p></div><Link className="button button-secondary" to="/practice"><i className="ti ti-plus" /> Add history</Link></header>
-      <div className="profile-hero panel"><div className="profile-avatar"><i className="ti ti-user" /></div><div><span className="eyebrow">DSA LEARNER</span><h2>{proficiency}</h2><p>{analytics.solved} problems marked solved across {analytics.topics.filter((topic) => topic.records).length} practiced topics.</p></div></div>
+      <div className="profile-hero panel"><div className="profile-avatar" aria-hidden="true">{initials}</div><div><span className="profile-user-name">{userName}</span><h2>{proficiency}</h2><p>{analytics.solved} problems marked solved across {analytics.topics.filter((topic) => topic.records).length} practiced topics.</p></div></div>
       <section className="stat-grid profile-stat-grid">
         <article className="stat-card tone-green"><span>Easy solved</span><strong className="stat-value">{analytics.difficulty[0].solved}</strong><small>{analytics.difficulty[0].completionRate ?? '—'}% completion of logged Easy</small></article>
         <article className="stat-card tone-orange"><span>Medium solved</span><strong className="stat-value">{analytics.difficulty[1].solved}</strong><small>{analytics.difficulty[1].completionRate ?? '—'}% completion of logged Medium</small></article>

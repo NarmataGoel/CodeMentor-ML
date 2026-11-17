@@ -32,6 +32,7 @@ def calculate_weak_topics(problems, top_n=3):
             if topic not in topic_stats:
                 topic_stats[topic] = {
                     "attempts": 0,
+                    "sessions": 0,
                     "successes": 0,
                 }
 
@@ -45,6 +46,7 @@ def calculate_weak_topics(problems, top_n=3):
                 )
 
                 topic_stats[topic]["attempts"] += attempts
+                topic_stats[topic]["sessions"] += 1
 
                 if solved:
                     topic_stats[topic]["successes"] += 1
@@ -53,12 +55,13 @@ def calculate_weak_topics(problems, top_n=3):
 
     for topic, stats in topic_stats.items():
         attempts = stats["attempts"]
+        sessions = stats["sessions"]
         successes = stats["successes"]
 
-        if attempts == 0:
+        if sessions == 0:
             continue
 
-        success_rate = successes / attempts
+        success_rate = successes / sessions
 
         # More failed attempts + more practice history
         # produces a stronger weakness score.
@@ -70,6 +73,7 @@ def calculate_weak_topics(problems, top_n=3):
         results.append({
             "topic": topic,
             "attempts": attempts,
+            "sessions": sessions,
             "successes": successes,
             "success_rate": success_rate,
             "weakness_score": weakness_score,

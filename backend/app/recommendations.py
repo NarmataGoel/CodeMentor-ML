@@ -3,7 +3,7 @@ import math
 import re
 from pathlib import Path
 
-from app.model import predict_success
+from app.model import predict_success_batch
 from app.features import build_student_features
 
 
@@ -106,6 +106,7 @@ def build_recommendations(problems, top_n=5):
         )
 
         attempts = 0
+        sessions = 0
         successes = 0
 
         for attempt in history:
@@ -125,13 +126,14 @@ def build_recommendations(problems, top_n=5):
             )
 
             attempts += session_attempts
+            sessions += 1
 
             if solved:
                 successes += 1
 
         success_rate = (
-            successes / attempts
-            if attempts > 0
+            successes / sessions
+            if sessions > 0
             else 0.0
         )
 
@@ -145,6 +147,7 @@ def build_recommendations(problems, top_n=5):
             ),
             "tags": tags,
             "attempts": attempts,
+            "sessions": sessions,
             "successes": successes,
             "success_rate": success_rate,
         }
@@ -164,10 +167,12 @@ def build_recommendations(problems, top_n=5):
 
                 topic_stats[topic] = {
                     "attempts": 0,
+                    "sessions": 0,
                     "successes": 0,
                 }
 
             topic_stats[topic]["attempts"] += attempts
+            topic_stats[topic]["sessions"] += sessions
             topic_stats[topic]["successes"] += successes
 
     # --------------------------------------------------
@@ -179,10 +184,11 @@ def build_recommendations(problems, top_n=5):
     for topic, stats in topic_stats.items():
 
         attempts = stats["attempts"]
+        sessions = stats["sessions"]
 
         success_rate = (
-            stats["successes"] / attempts
-            if attempts > 0
+            stats["successes"] / sessions
+            if sessions > 0
             else 0.0
         )
 
@@ -253,9 +259,30 @@ def build_recommendations(problems, top_n=5):
     # 4. Score every candidate
     # --------------------------------------------------
 
+    candidate_list = list(candidates.values())
+    candidate_feature_values = []
+
+    for candidate in candidate_list:
+        features = build_student_features(
+            problems,
+            target_problem_title=candidate["title"]
+        )
+
+        candidate_feature_values.append([
+            features["previous_attempts"],
+            features["previous_success_rate"],
+            features["recent_success_rate_5"],
+            features["previous_problem_attempts"],
+            features["previous_problem_success_rate"],
+            features["hour"],
+            features["day_of_week"],
+            features["days_since_first_submission"],
+        ])
+
+    predictions = predict_success_batch(candidate_feature_values)
     recommendations = []
 
-    for candidate in candidates.values():
+    for candidate, prediction in zip(candidate_list, predictions):
 
         title = candidate["title"]
 
@@ -270,6 +297,7 @@ def build_recommendations(problems, top_n=5):
         if history:
 
             attempts = history["attempts"]
+            sessions = history["sessions"]
 
             successes = history["successes"]
 
@@ -282,6 +310,7 @@ def build_recommendations(problems, top_n=5):
         else:
 
             attempts = 0
+            sessions = 0
             successes = 0
             success_rate = 0.0
 
@@ -292,26 +321,6 @@ def build_recommendations(problems, top_n=5):
         # --------------------------------------------------
         # ML prediction
         # --------------------------------------------------
-
-        features = build_student_features(
-            problems,
-            target_problem_title=title
-        )
-
-        feature_values = [[
-            features["previous_attempts"],
-            features["previous_success_rate"],
-            features["recent_success_rate_5"],
-            features["previous_problem_attempts"],
-            features["previous_problem_success_rate"],
-            features["hour"],
-            features["day_of_week"],
-            features["days_since_first_submission"],
-        ]]
-
-        prediction = predict_success(
-            feature_values
-        )
 
         success_probability = (
             prediction[
@@ -567,6 +576,7 @@ def build_recommendations(problems, top_n=5):
             ],
 
             "attempts": attempts,
+            "sessions": sessions,
 
             "successes": successes,
 

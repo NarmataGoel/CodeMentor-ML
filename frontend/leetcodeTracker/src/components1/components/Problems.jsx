@@ -53,7 +53,6 @@ const Problems = () => {
      */
     if (editing) {
       const updatedProblem = {
-        userId: editing.userId || 'demo-user',
         title: problem.title,
         difficulty: problem.difficulty,
         status: problem.status,
@@ -122,7 +121,6 @@ const Problems = () => {
        */
       if (existing) {
         const updatedProblem = {
-          userId: existing.userId || 'demo-user',
           title: existing.title,
           difficulty: problem.difficulty,
           status: problem.status,
@@ -169,7 +167,6 @@ const Problems = () => {
          * Create a new MongoDB document.
          */
         const newProblem = {
-          userId: 'demo-user',
           title: problem.title,
           difficulty: problem.difficulty,
           status: problem.status,

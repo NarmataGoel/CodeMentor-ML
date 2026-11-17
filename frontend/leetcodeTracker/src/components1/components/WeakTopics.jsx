@@ -13,7 +13,7 @@ const WeakTopics = () => {
         setLoading(true)
         setError('')
 
-        const data = await getWeakTopics('demo-user')
+        const data = await getWeakTopics()
 
         setTopics(data.weakTopics || [])
       } catch (error) {
@@ -71,11 +71,11 @@ const WeakTopics = () => {
       return `Your success rate is ${successRate}%, indicating difficulty with this topic.`
     }
 
-    if (topic.attempts < 3) {
+    if (topic.sessions < 3) {
       return 'There is limited practice evidence for this topic so far.'
     }
 
-    return `Your current success rate is ${successRate}% across ${topic.attempts} attempts.`
+    return `Your current success rate is ${successRate}% across ${topic.sessions} practice sessions (${topic.attempts} tries).`
   }
 
   return (
@@ -177,8 +177,8 @@ const WeakTopics = () => {
                   <h2>{topic.topic}</h2>
 
                   <p className="insight-summary">
-                    {topic.successes} successful outcomes out of{' '}
-                    {topic.attempts} attempts
+                    {topic.successes} solved sessions out of{' '}
+                    {topic.sessions} practice sessions ({topic.attempts} tries)
                   </p>
 
                   <div className="progress-track">
@@ -245,7 +245,7 @@ const WeakTopics = () => {
 
                         <span>
                           {topic.successes}/
-                          {topic.attempts} successful outcomes
+                          {topic.successes}/{topic.sessions} sessions solved · {topic.attempts} tries
                         </span>
                       </div>
 

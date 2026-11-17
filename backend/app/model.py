@@ -30,16 +30,21 @@ def predict_success(features):
     will successfully solve a problem.
     """
 
-    feature_data = pd.DataFrame(
-        features,
-        columns=MODEL_FEATURES
-    )
+    return predict_success_batch(features)[0]
 
-    probability = model.predict_proba(feature_data)[0][1]
 
-    prediction = int(probability >= 0.5)
+def predict_success_batch(features):
+    """Predict success probabilities for several feature rows at once."""
+    if not features:
+        return []
 
-    return {
-        "prediction": prediction,
-        "success_probability": float(probability)
-    }
+    feature_data = pd.DataFrame(features, columns=MODEL_FEATURES)
+    probabilities = model.predict_proba(feature_data)[:, 1]
+
+    return [
+        {
+            "prediction": int(probability >= 0.5),
+            "success_probability": float(probability),
+        }
+        for probability in probabilities
+    ]

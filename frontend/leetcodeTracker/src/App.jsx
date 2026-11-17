@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { AuthProvider, useAuth } from './auth/AuthContext'
+import RequireAuth from './auth/RequireAuth'
 import Analysis from './components1/components/Analysis'
+import AuthPage from './components1/components/AuthPage'
 import Goal from './components1/components/Goal'
 import Home from './components1/components/Home'
 import Layout from './components1/components/Layout'
@@ -23,41 +26,47 @@ function readStorage(key, fallback) {
   }
 }
 
-function App() {
-   const [problems, setProblems] = useState([])
-  const [goals, setGoals] = useState(() => {
-    const stored = readStorage('learning-goals', [])
-    return Array.isArray(stored) ? stored : []
-  })
-
-  
+function AppContent() {
+  const { session, loading } = useAuth()
+  const userId = session?.user?.id ?? null
+  const [problems, setProblems] = useState([])
+  const [goals, setGoals] = useState([])
+  const [goalsUserId, setGoalsUserId] = useState(null)
 
   useEffect(() => {
-    localStorage.setItem('learning-goals', JSON.stringify(goals))
-  }, [goals])
+    let active = true
+    setProblems([])
+    setGoalsUserId(null)
+    setGoals(userId ? (() => {
+      const stored = readStorage(`learning-goals:${userId}`, [])
+      return Array.isArray(stored) ? stored : []
+    })() : [])
+    if (userId) setGoalsUserId(userId)
 
-  const tracker = useMemo(
-    () => ({ problems, setProblems, goals, setGoals }),
-    [problems, goals],
-  )
+    if (!userId) return () => { active = false }
 
-  useEffect(() => {
-  const loadProblems = async () => {
-    try {
-      const data = await getProblems('demo-user')
-      setProblems(data)
-    } catch (error) {
+    getProblems().then((data) => {
+      if (active) setProblems(data)
+    }).catch((error) => {
       console.error('Unable to load problems from MongoDB:', error)
-    }
-  }
+    })
 
-  loadProblems()
-}, [])
+    return () => { active = false }
+  }, [userId])
+
+  useEffect(() => {
+    if (userId && goalsUserId === userId) {
+      localStorage.setItem(`learning-goals:${userId}`, JSON.stringify(goals))
+    }
+  }, [goals, userId, goalsUserId])
+
+  const tracker = useMemo(() => ({ problems, setProblems, goals, setGoals }), [problems, goals])
 
   return (
     <Problemcontext.Provider value={tracker}>
       <Routes>
-        <Route element={<Layout />}>
+        <Route path="auth" element={<AuthPage />} />
+        <Route element={<RequireAuth><Layout /></RequireAuth>}>
           <Route index element={<Home />} />
           <Route path="practice" element={<Problems />} />
           <Route path="analytics" element={<Analysis />} />
@@ -70,9 +79,14 @@ function App() {
           <Route path="goal" element={<Navigate to="/goals" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
+        <Route path="*" element={<Navigate to={loading ? '/auth' : session ? '/' : '/auth'} replace />} />
       </Routes>
     </Problemcontext.Provider>
   )
+}
+
+function App() {
+  return <AuthProvider><AppContent /></AuthProvider>
 }
 
 export default App
